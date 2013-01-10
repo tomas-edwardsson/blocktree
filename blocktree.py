@@ -37,9 +37,11 @@ def main():
 	dm_maps = dm.maps()
 
 	# Loop through the device mapper maps
-	for map in dm.maps():
+	for map in dm_maps:
 		print map.name.strip()
 		get_deps(map.deps, 1)
+		# Delimiter line
+		print "-"*80
 
 def get_deps(deps, depth):
 	for dep in deps:
@@ -47,11 +49,11 @@ def get_deps(deps, depth):
 		local_deps = block.getDmDeps(major=dep.major, minor=dep.minor)
 		# DM Device
 		if local_deps:
-			print "%s%s" % (" "*depth*8, dmmap.name.strip())
+			print u"%s\u21B3%s%s" % (" "*depth, " "*depth*8, dmmap.name.strip())
 			get_deps(local_deps, depth + 1)
 		# NON DM device
 		else:
-			print "%s%s" % (" "*depth*8, find_name_by_devnum(dep.dev))
+			print u"%s\u21B3%s%s" % (" "*depth, " "*depth*8, find_name_by_devnum(dep.dev))
 	
 def find_name_by_devnum(devnum):
 	for i in context.list_devices(subsystem='block'):
